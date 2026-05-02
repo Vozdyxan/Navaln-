@@ -1,6 +1,6 @@
 
 
-from PyQt5.QtCore import Qt, QTime
+from PyQt5.QtCore import Qt, QTime, QTimer
 from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QLabel, QVBoxLayout, QHBoxLayout, QLineEdit
 
@@ -159,6 +159,136 @@ main_win.show()
 # work_win.show()
 # result_win.show()
 app.exec_()
+
+
+def timer1Event(timer):
+    global time1
+    time1 = time1.addSecs(-1)
+    text_timer.setText(time1.toString("hh:mm:ss"))
+    text_timer.setFont(QFont("Times", 36, QFont.Bold))
+    text_timer.setStyleSheet("color: rgb(0,0,0)")
+    if time1.toString("hh:mm:ss") == "00:00:00":
+        timer.stop()
+def test1():
+    global time1
+    time1 = QTime(0, 0, 15)
+    timer = QTimer()
+    timer.timeout.connect(lambda: timer1Event(timer))
+    timer.start(1000)
+    def timer2Event(timer):
+    global time2
+    time2 = time2.addSecs(-1)
+    text_timer.setText(time2.toString("hh:mm:ss")[6:8])
+    text_timer.setStyleSheet("color: rgb(0,0,0)")
+    text_timer.setFont(QFont("Times", 36, QFont.Bold))
+    if time2.toString("hh:mm:ss") == "00:00:00":
+        timer.stop()
+def test2():
+    global time2
+    time2 = QTime(0, 0, 30)
+    timer = QTimer()
+    # одно приседание в 1.5 сек
+    timer.timeout.connect(lambda: timer2Event(timer))
+    timer.start(1500)
+def timer3Event(timer):
+    global time3
+    time3 = time3.addSecs(-1)
+    text_timer.setText(time3.toString("hh:mm:ss"))
+    if int(time3.toString("hh:mm:ss")[6:8]) >= 45:
+        text_timer.setStyleSheet("color: rgb(0,255,0)")
+    elif int(time3.toString("hh:mm:ss")[6:8]) <= 15:
+        text_timer.setStyleSheet("color: rgb(0,255,0)")
+    else:
+        text_timer.setStyleSheet("color: rgb(0,0,0)")
+    text_timer.setFont(QFont("Times", 36, QFont.Bold))
+    if time3.toString("hh:mm:ss") == "00:00:00":
+        timer.stop()
+def test3():
+    global time3
+    time3 = QTime(0, 1, 0)
+    timer = QTimer()
+    timer.timeout.connect(lambda: timer3Event(timer))
+    timer.start(1000)
+
+    txt_res1 = "низкая. Срочно обратитесь к врачу!"
+txt_res2 = "удовлетворительная. Обратитесь к врачу!"
+txt_res3 = "средняя. Возможно, стоит дополнительно обследоваться у врача."
+txt_res4 = "выше среднего"
+txt_res5 = "высокая"
+global index
+    if age < 7:
+        index = 0
+        return "нет данных для такого возраста"
+    index = (4 * (int(test1) + int(test2) + int(test3)) - 200) / 10
+    if age == 7 or age == 8:
+        if index >= 21:
+            return txt_res1
+        elif index < 21 and index >= 17:
+            return txt_res2
+        elif index < 17 and index >= 12:
+            return txt_res3
+        elif index < 12 and index >= 6.5:
+            return txt_res4
+        else:
+            return txt_res5
+    elif age == 9 or age == 10:
+        if index >= 19.5:
+            return txt_res1
+        elif index < 19.5 and index >= 15.5:
+            return txt_res2
+        elif index < 15.5 and index >= 10.5:
+            return txt_res3
+        elif index < 10.5 and index >= 5:
+            return txt_res4
+        else:
+            return txt_res5
+    elif age == 11 or age == 12:
+        if index >= 18:
+            return txt_res1
+        elif index < 18 and index >= 14:
+            return txt_res2
+elif index < 14 and index >= 9:
+            return txt_res3
+        elif index < 9 and index >= 3.5:
+            return txt_res4
+        else:
+            return txt_res5
+    elif age == 13 or age == 14:
+        print('ind ', index)
+        if index >= 16.5:
+            return txt_res1
+        elif index < 16.5 and index >= 12.5:
+            return txt_res2
+        elif index < 12.5 and index >= 7.5:
+            return txt_res3
+        elif index < 7.5 and index >= 2:
+            return txt_res4
+        else:
+            return txt_res5
+    elif age >= 15:
+        if index >= 15:
+            return txt_res1
+        elif index < 15 and index >= 11:
+            return txt_res2
+        elif index < 11 and index >= 6:
+            return txt_res3
+        elif index < 6 and index >= 0.5:
+            return txt_res4
+        else:
+            return txt_res5
+global res
+
+    person = line_1_fio.text()
+    age = int(line_2_age.text())
+    test1 = line_3_res_test1.text()
+    test2 = line_4_res_test3.text()
+    test3 = line_5_res_test3.text()
+
+    res = results(person, age, test1, test2, test3)
+
+    txt_index.setText('Индекс Руфье: ' + str(index))
+    txt_res.setText('Работоспособность сердца: ' + res)
+
 
 
 
